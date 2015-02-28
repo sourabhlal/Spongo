@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib2
-
+from django.shortcuts import render
+from spongoApp.forms import *
 
 #Returns list with {name, url} objects
 def getCountries(url):

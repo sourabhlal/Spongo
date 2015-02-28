@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from spongoApp.forms import *
+from spongoApp.views.skyquery import *
+from spongoApp.views.getComparativeData import *
 
 def home(request):
 	context = {}
