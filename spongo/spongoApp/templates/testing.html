@@ -10,9 +10,18 @@
     	<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
 	</head>
 	<body>
-		<form>
-			{{QueryForm}}
-		</form>
+		<form method="post" action="/testing">
+				<div>
+					<table>
+						{{QueryForm}}
+					</table>
+					<div >
+						<input id="submitButton" class="btn btn-lg btn-primary" type="submit" value="Submit">
+					</div>
+					{% csrf_token %}
+				</div>
+
+			</form>
 		{{results}}
 	</body>
 </html>
