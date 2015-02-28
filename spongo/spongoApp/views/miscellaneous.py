@@ -26,4 +26,5 @@ def testing(request):
 	#data['startingDestination3']
 
 	#get JSON
+	context["results"] = data['minimumBudget']
 	return render(request, 'testing.html', context)
