@@ -1,8 +1,8 @@
 from django import forms
-from spongo.models import *
+from spongoApp.models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from django.forms.widgets import PasswordInput, TextInput, Textarea, FileInput,HiddenInput
+from django.forms.widgets import PasswordInput, TextInput, Textarea, FileInput,HiddenInput,NumberInput
 
 
 class LoginForm(AuthenticationForm):

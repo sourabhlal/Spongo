@@ -1,11 +1,12 @@
 from django.shortcuts import render
+from spongoApp.forms import *
 
 def home(request):
-	context = []
+	context = {}
 	return render(request, 'homepage.html')
 
 def testing(request):
-	context = []
+	context = {}
 	if request.method == "GET":
 		context['QueryForm'] = spongoQuery()
 		return render(request, 'testing.html', context)
