@@ -1,1 +1,13 @@
 {% extends "baseTemplate.html" %}
+    {% block customCSSFiles %}
+	<link href="/static/css/homepageTemplate.css" rel="stylesheet">
+    {% endblock %}
+
+	{% block pageBody %}
+    <div class="ribbon">
+		<div class="formBox" id="formBox">
+		hello<br>
+		</div>
+	</div>
+
+	{% endblock %}

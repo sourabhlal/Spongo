@@ -5,4 +5,5 @@ urlpatterns = patterns('',
 	url(r'^', 'spongoApp.views.miscellaneous.home'),
     url(r'^home/', 'spongoApp.views.miscellaneous.home'),
     url(r'^settings/', 'spongoApp.views.settings.home'),
+    url(r'^testing/', 'spongoApp.views.miscellaneous.testing'),
 )

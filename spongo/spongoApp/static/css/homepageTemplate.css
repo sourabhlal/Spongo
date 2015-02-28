@@ -1,0 +1,32 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  overflow: hidden;
+  padding-top: 100px;
+  padding-bottom: 40px;
+  background-image:url("/static/img/background.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.formBox {
+  vertical-align: middle;
+  text-align: center;
+  background-color: rgba(255,255,255,0.8);
+  height: 500px;
+  width: 500px;
+  border-radius: 50px;
+  padding: 25px;
+  box-shadow: 2px 2px 50px #000;
+}
+
+.ribbon {
+  height: 500px;
+  vertical-align: middle;
+  text-align: center;
+}
