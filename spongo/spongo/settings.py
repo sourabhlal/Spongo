@@ -24,7 +24,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = [.nicklee.de]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
