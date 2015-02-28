@@ -10,8 +10,8 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(label='',widget=PasswordInput(attrs={'class': 'form-control','placeholder':'Password'}))
 
 class spongoQuery(forms.Form):
-	minimumBudget = forms.IntegerField(label='MinimumBudget',widget=NumberInput(attrs={'class': 'form-control','placeholder': 'Duration of trip'}))
-	maximumBudget =  forms.IntegerField(label='Length of trip',widget=NumberInput(attrs={'class': 'form-control','placeholder': 'Duration of trip'}))
+	minimumBudget = forms.IntegerField(label='MinimumBudget',widget=NumberInput(attrs={'class': 'form-control','placeholder': 'minimumBudget'}))
+	maximumBudget =  forms.IntegerField(label='maximumBudget',widget=NumberInput(attrs={'class': 'form-control','placeholder': 'maximumBudget'}))
 
 	duration = forms.IntegerField(label='Length of trip',widget=NumberInput(attrs={'class': 'form-control','placeholder': 'Duration of trip'}))
 	durationUnit = forms.ChoiceField(label="unit",choices=[(1,"Day(s)"),(2,"Week(s)"),(3,"Month(s)")])
