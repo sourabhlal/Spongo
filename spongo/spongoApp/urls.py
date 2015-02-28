@@ -3,6 +3,6 @@ from django.contrib import admin
 
 urlpatterns = patterns('',
 	url(r'^', 'spongoApp.views.home'),
-    url(r'^home/', 'spongoApp.views.home'),
-    url(r'^settings/', 'spongoApp.views.settings'),
+    url(r'^home/', 'spongoApp.views.miscellaneous.home'),
+    url(r'^settings/', 'spongoApp.views.settings.home'),
 )

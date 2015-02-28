@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<meta name="description" content="">
+    	<meta name="author" content="Sourabh Lal, Nick Lee, Bidesh Thapaliya, JP Breuer">
+    	<link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    	<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+    	{% block pageTitle %}
+    	<title>Spongo</title>
+	    {% endblock %}    	
+
+    	<!-- Bootstrap core CSS -->
+    	<link href="/static/bootstrap-3.2.0-dist/css/bootstrap.min.css" rel="stylesheet">
+	    <!-- Custom styles for this template -->
+	    <link href="/static/css/baseTemplate.css" rel="stylesheet">
+	    {% block customCSSFiles %}
+
+	    {% endblock %}
+
+	    <!-- Custom scripts for this template -->
+	    <script src="/static/js/jquery-1.11.1.min.js"></script>
+	    <script src="/static/bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
+	    <script src="/static/js/baseTemplate.js"></script>
+	    {% block customJSFiles %}
+
+	    {% endblock %}
+	</head>
+	<body>
+		{% block pageBody %}
+    	{% endblock %}
+	</body>
+</html>
