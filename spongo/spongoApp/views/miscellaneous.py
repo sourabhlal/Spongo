@@ -28,7 +28,7 @@ def results(request):
 		tripDuration = 7*int(data['duration'])
 	else:
 		tripDuration = 30*int(data['duration'])
-	f = start + datetime.timedelta(days=tripDuration)
+	f = s + datetime.timedelta(days=tripDuration)
 	
 	#parameters for api query:
 	minBudget = data['minimumBudget']
