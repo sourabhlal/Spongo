@@ -20,8 +20,45 @@
 					</div>
 					{% csrf_token %}
 				</div>
-
 			</form>
-		{{results}}
+
+			{% if flightDetails %}
+			<div id="tableHeader">
+				<div class="col-md-2">
+					Price+Pie
+				</div>
+				<div class="col-md-3">
+					Flight
+				</div>
+				<div class="col-md-3">
+					Accomodation
+				</div>
+				<div class="col-md-3">
+					Living Expense
+				</div>
+				<div class="col-md-1">
+					Book now!
+				</div>
+			</div>
+			
+			{% for s, p in flightDetails %}
+			<div id="tableRow">
+				<div class="col-md-2">
+					{{p.Price}}
+				</div>
+				<div class="col-md-3">
+					<p> {{s.Carrier}} </p>
+					<p> {{s.FlightNumber}} </p>
+					<p> {{s.Duration}} </p>
+				</div>
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-1">
+				</div>
+			</div>
+			{% endfor %}
+			{% endif %}
 	</body>
 </html>
