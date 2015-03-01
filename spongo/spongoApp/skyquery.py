@@ -54,6 +54,7 @@ def getSkyScannerCosts(itinerary):
       print itinerary['OutboundLegId'],":",u"\u20AC",i['Price']
    #print itinerary['OutboundLegId'],itinerary['PricingOptions']
 
+#Prints for now BC we don't understand the data struct
 def getSkyScannerSegments(itinerary):
    details = itinerary['BookingDetailsLink']
    r = requests.put("http://partners.api.skyscanner.net"+details['Uri']+"?apiKey="+apikey, data=urlparse.parse_qs("&"+details['Body']))
@@ -62,6 +63,15 @@ def getSkyScannerSegments(itinerary):
       segments = results['Segments']
       for s in segments:
          print "Flight",s['Carrier'],s['FlightNumber'],"Lasting",s['Duration']
+
+
+def getSkyScannerSegments_raw(itinerary):
+   details = itinerary['BookingDetailsLink']
+   r = requests.put("http://partners.api.skyscanner.net"+details['Uri']+"?apiKey="+apikey, data=urlparse.parse_qs("&"+details['Body']))
+   if r.status_code == 201:
+      results = requests.get(r.headers['Location']+"?apiKey="+apikey)
+      return results.text
+
 
 #Initiates Sessions for countries with PIA VPN endpoints
 #configured to avoid rate limit issues
@@ -73,6 +83,7 @@ def VPNResultSet(queryData):
       returnSet.append(getSkyScannerRoutes(queryData))
       time.sleep(6)
    return returnSet
+
 
 
 #print requests.get("http://partners.api.skyscanner.net/apiservices/reference/v1.0/countries/en-GB?apiKey="+apikey).json()
@@ -87,7 +98,27 @@ for i in itins:
    #print i['BookingDetailsLink']
    getSkyScannerCosts(i)
    getSkyScannerSegments(i)
+   print getSkyScannerSegments_raw(i)
 
+
+
+
+
+
+def get_airport(city):
+   headers = {
+      'User-Agent': 'kayakandroidphone/6.3.1',
+      'Accept-Encoding': 'gzip,deflate',
+      'Accept-Language': 'en-US',
+      'Host': 'www.kayak.com',
+      'Connection': 'Keep-Alive'
+   }
+
+   url = 'https://www.kayak.com/f/smarty?lc=en&lc_cc=US&s=1&where={city}&f=t'.format(city=city)
+
+   r = requests.get(url, headers=headers)
+   code = r.text.encode('ascii', 'ignore').split('\n')[0].split('[')[-1].split('/')[0].strip()
+   return code
 
 
 #http://partners.api.skyscanner.net/apiservices/pricing/v1.0/?apikey=ilw22874698541348193416710397562&inbounddate=2015-03-14&destinationplace=ULN&cabinclass=economy&adults=1&locale=en-GB&country=UK&outbounddate=2015-03-07&Accept=application%2Fjson&currency=GBP&originplace=IAD&locationSchema=iata&infants=0&grouppricing=false&Content-Type=application%2Fx-www-form-urlencoded&children=0
