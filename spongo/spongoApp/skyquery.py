@@ -9,6 +9,40 @@ __license__ = "MIT License"
 #Reminder to remove this before open sourcing
 apikey = "ilw22874698541348193416710397562"
 
+class FlightSegment:
+   def __init__(self, arrivalDateTime, carrier, departureDateTime, destinationRNID, directionality, duration, flightnumber, operatingcarrier, originRNID):
+      self.arrivalDateTime = arrivalDateTime
+      self.departureDateTime = departureDateTime
+      self.carrier = carrier
+      self.destinationRNID = destinationRNID
+      self.originRNID = originRNID
+      self.directionality = directionality
+      self.duration = duration
+      self.flightnumber = flightnumber
+      self.operatingcarrier = operatingcarrier
+   def __str__(self):
+      try:
+         outstr = "".join(["[",self.directionality,"] ",airlineCache[self.carrier].iataCode,str(self.flightnumber),", Duration ",str(self.duration)," minutes from ",airportCache[self.originRNID].iataCode," to ",airportCache[self.destinationRNID].iataCode])
+         return outstr
+      except:
+         return "err"
+
+
+class FlightSet:
+   def __init__(self, flightSegments, cost, currency):
+      self.flightSegments = flightSegments
+      self.cost = round(cost, 2)
+      self.currency = currency
+   def __str__(self):
+      outstr = ""
+      for s in self.flightSegments:
+         if str(s) != "err":
+            outstr += (str(s) + "\n")
+      outstr+= "Trip Cost: "+self.currency+" "+str(self.cost)
+      return outstr
+
+
+
 #We can shoehorn places support if need be
 #Edge case, no time or sleep.
 #Removed parentID because it was bugged
@@ -154,7 +188,7 @@ def getSkyScannerCosts(itinerary):
    #print itinerary['OutboundLegId'],itinerary['PricingOptions']
 
 #Prints for now BC we don't understand the data struct
-def getSkyScannerSegments(itinerary):
+def getSkyScannerSegments_print(itinerary):
    details = itinerary['BookingDetailsLink']
    r = requests.put("http://partners.api.skyscanner.net"+details['Uri']+"?apiKey="+apikey, data=urlparse.parse_qs("&"+details['Body']))
    if r.status_code == 201:
@@ -167,8 +201,28 @@ def getSkyScannerSegments(itinerary):
             else:
                print "<= Flight",airlineCache[s['Carrier']].iataCode,s['FlightNumber'],"Lasting",s['Duration'],"minutes from",airportCache[s['OriginStation']].iataCode,"to",airportCache[s['DestinationStation']].iataCode
          except:
+            print "\n"
             return False
       return True
+
+def getSkyScannerSegments(itinerary):
+   details = itinerary['BookingDetailsLink']
+   r = requests.put("http://partners.api.skyscanner.net"+details['Uri']+"?apiKey="+apikey, data=urlparse.parse_qs("&"+details['Body']))
+   if r.status_code == 201:
+      results = requests.get(r.headers['Location']+"?apiKey="+apikey).json()
+      segments = results['Segments']
+      flightGroup = []
+      for s in segments:
+         try:
+            if s['Directionality']=='Outbound':
+               fs = FlightSegment(s['ArrivalDateTime'],s['Carrier'],s['DepartureDateTime'],s['DestinationStation'],"Outbound",s['Duration'],s['FlightNumber'],s['OperatingCarrier'],s['OriginStation'])
+               flightGroup.append(fs)
+            else:
+               fs = FlightSegment(s['ArrivalDateTime'],s['Carrier'],s['DepartureDateTime'],s['DestinationStation'],"Inbound",s['Duration'],s['FlightNumber'],s['OperatingCarrier'],s['OriginStation'])
+               flightGroup.append(fs)
+         except:
+            return False
+      return flightGroup
 
 def getSkyScannerSegments_raw(itinerary):
    details = itinerary['BookingDetailsLink']
@@ -208,17 +262,37 @@ def getItinerarySet(initialResults):
    return r
 
 #Testing code
-def test():
+def demo():
+   banner = '  /$$$$$$                                                    /$$           /$$       /$$        /$$$$$$  /$$$$$$$  /$$$$$$\n /$$__  $$                                                  | $$          |__/      | $$       /$$__  $$| $$__  $$|_  $$_/\n| $$  \\__/  /$$$$$$   /$$$$$$  /$$$$$$$   /$$$$$$   /$$$$$$ | $$  /$$$$$$  /$$  /$$$$$$$      | $$  \\ $$| $$  \\ $$  | $$  \n|  $$$$$$  /$$__  $$ /$$__  $$| $$__  $$ /$$__  $$ /$$__  $$| $$ /$$__  $$| $$ /$$__  $$      | $$$$$$$$| $$$$$$$/  | $$  \n \\____  $$| $$  \\ $$| $$  \\ $$| $$  \\ $$| $$  \\ $$| $$  \\ $$| $$| $$  \\ $$| $$| $$  | $$      | $$__  $$| $$____/   | $$  \n /$$  \\ $$| $$  | $$| $$  | $$| $$  | $$| $$  | $$| $$  | $$| $$| $$  | $$| $$| $$  | $$      | $$  | $$| $$        | $$  \n|  $$$$$$/| $$$$$$$/|  $$$$$$/| $$  | $$|  $$$$$$$|  $$$$$$/| $$|  $$$$$$/| $$|  $$$$$$$      | $$  | $$| $$       /$$$$$$\n \\______/ | $$____/  \\______/ |__/  |__/ \\____  $$ \\______/ |__/ \\______/ |__/ \\_______/      |__/  |__/|__/      |______/\n          | $$                           /$$  \\ $$                                                                        \n          | $$                          |  $$$$$$/                                                                        \n          |__/                           \\______/                                                                         '
+   print banner
+   time.sleep(1)
    #Fun fact: If the airport code doesn't exist, this app crashes
    #VPNResultSet(query)
    res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
    itins = getItinerarySet(res)
+   possibleRoutes = []
+   
+   #Non-Object Oriented
    for i in itins:
       price = getSkyScannerCosts(i)
-      if(price!=None and getSkyScannerSegments(i)):
+      if(price!=None and getSkyScannerSegments_print(i)):
          print "Trip Cost: "+u"\u20AC"+str(getSkyScannerCosts(i))+"\n"
+
+   time.sleep(10)
+   res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
+   itins = getItinerarySet(res)
+   possibleRoutes = []
+   for i in itins:
+      price = getSkyScannerCosts(i)
+      if(price!=None):
+         segs = getSkyScannerSegments(i)
+         if(segs != False and segs != None):
+            possibleRoutes.append(FlightSet(segs, getSkyScannerCosts(i), "EUR"))
+            print FlightSet(segs, getSkyScannerCosts(i), "EUR")
+            print ""
+
 
 
    #print getSkyScannerRoutes_raw(query)
 
-test()
+demo()
