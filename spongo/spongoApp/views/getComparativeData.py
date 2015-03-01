@@ -57,5 +57,5 @@ def getAll(baseurl):
 		print getCountryInfo(country)
 
 
-
-getAll('http://www.budgetyourtrip.com/countrylist.php')
+def getCostOfLivingData():
+	getAll('http://www.budgetyourtrip.com/countrylist.php')

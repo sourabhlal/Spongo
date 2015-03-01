@@ -51,7 +51,8 @@ def getSkyScannerRoutes(queryData):
 def getSkyScannerCosts(itinerary):
    prices = itinerary['PricingOptions']
    for i in prices:
-      print itinerary['OutboundLegId'],":",u"\u20AC",i['Price']
+      print itinerary['OutboundLegId'],":",i['Price']
+   return prices
    #print itinerary['OutboundLegId'],itinerary['PricingOptions']
 
 def getSkyScannerSegments(itinerary):
@@ -62,6 +63,7 @@ def getSkyScannerSegments(itinerary):
       segments = results['Segments']
       for s in segments:
          print "Flight",s['Carrier'],s['FlightNumber'],"Lasting",s['Duration']
+      return segments
 
 #Initiates Sessions for countries with PIA VPN endpoints
 #configured to avoid rate limit issues
@@ -76,17 +78,16 @@ def VPNResultSet(queryData):
 
 
 #print requests.get("http://partners.api.skyscanner.net/apiservices/reference/v1.0/countries/en-GB?apiKey="+apikey).json()
-
-#Fun fact: If the airport code doesn't exist, this app crashes
-query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy")
-#VPNResultSet(query)
-
-res = getSkyScannerRoutes(query)
-itins = res['Itineraries']
-for i in itins:
-   #print i['BookingDetailsLink']
-   getSkyScannerCosts(i)
-   getSkyScannerSegments(i)
+def testSkyQuery():
+   #Fun fact: If the airport code doesn't exist, this app crashes
+   query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy")
+   #VPNResultSet(query)
+   res = getSkyScannerRoutes(query)
+   itins = res['Itineraries']
+   for i in itins:
+      #print i['BookingDetailsLink']
+      getSkyScannerCosts(i)
+      getSkyScannerSegments(i)
 
 
 
