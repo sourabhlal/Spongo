@@ -70,6 +70,7 @@ def getSkyScannerCosts(itinerary):
    for i in prices:
       print itinerary['OutboundLegId'],":",i['Price']
    #print itinerary['OutboundLegId'],itinerary['PricingOptions']
+   return prices
 
 #Prints for now BC we don't understand the data struct
 def getSkyScannerSegments(itinerary):
@@ -83,6 +84,7 @@ def getSkyScannerSegments(itinerary):
             print "=> Flight",s['Carrier'],s['FlightNumber'],"Lasting"
          else:
             print "<= Flight",s['Carrier'],s['FlightNumber'],"Lasting"
+      return segments
 
 
 def getSkyScannerSegments_raw(itinerary):
