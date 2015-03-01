@@ -68,7 +68,7 @@ def getSkyScannerRoutes_raw(queryData):
 def getSkyScannerCosts(itinerary):
    prices = itinerary['PricingOptions']
    for i in prices:
-      print itinerary['OutboundLegId'],":",u"\u20AC",i['Price']
+      print itinerary['OutboundLegId'],":",i['Price']
    #print itinerary['OutboundLegId'],itinerary['PricingOptions']
 
 #Prints for now BC we don't understand the data struct
@@ -105,7 +105,7 @@ def VPNResultSet(queryData):
    return returnSet
 
 
-def testSkyQuery:
+def testSkyQuery():
    #print requests.get("http://partners.api.skyscanner.net/apiservices/reference/v1.0/countries/en-GB?apiKey="+apikey).json()
    #Fun fact: If the airport code doesn't exist, this app crashes
    query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy")
