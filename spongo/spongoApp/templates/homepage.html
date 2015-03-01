@@ -7,6 +7,32 @@
     <div class="ribbon">
 		<div class="formBox" id="formBox">
 		hello<br>
+		<form method="post" action="{% url 'results' %}">
+			<div>
+				<table>
+					<tr>
+						<td>Budget: $</td>
+						<td>{{QueryForm.maximumBudget}} - {{QueryForm.minimumBudget}}</td>
+					</tr>
+					<tr>
+						<td>Trip Duration</td>
+						<td>{{QueryForm.duration}} {{QueryForm.durationUnit}}</td>
+					</tr>
+					<tr>
+						<td>Starting location:</td>
+						<td>{{QueryForm.startingPoint}}</td>
+					</tr>					
+				</table>
+
+				<div >
+					<button id="spongoButton" class="btn btn-lg btn-primary" type="submit" value="Submit">
+						<img class="spongoButton" src="/static/img/spongoButton.png" name="image" width="70%">
+					</button>
+				</div>
+				{% csrf_token %}
+			</div>
+		</form>
+		
 		</div>
 	</div>
 
