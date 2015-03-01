@@ -4,8 +4,8 @@ Spontaneous Travel Web Application
 So, let's say that one day you wake up and think to yourself, "Man, I wish I could travel more".
 
 The sentiment is a nice one, but then you think of all the evil subclauses related with your dream of being more spontanous:
-- I wish I had more time
-- I wish I wouldn't blow all my money over a weekend
+- I wish I had more time.
+- I wish I wouldn't blow all my money over a weekend.
 - I'm too lazy/it's too much effort to plan a flight, accommodation, food, fun, and inner-city transit stuff if I only have a few days or a free weekend.
 
 Spongo is the real-time solution to all your pseudo-spontaneity travel problems.
