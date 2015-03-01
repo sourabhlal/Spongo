@@ -29,10 +29,11 @@ class FlightSegment:
 
 
 class FlightSet:
-   def __init__(self, flightSegments, cost, currency):
+   def __init__(self, flightSegments, cost, currency, deeplink):
       self.flightSegments = flightSegments
       self.cost = round(cost, 2)
       self.currency = currency
+      self.deeplink = deeplink
    def __str__(self):
       outstr = ""
       for s in self.flightSegments:
@@ -231,6 +232,13 @@ def getSkyScannerSegments_raw(itinerary):
       results = requests.get(r.headers['Location']+"?apiKey="+apikey)
       return results.text
 
+#Add Endpoint to retrieve DeepLinks
+#Return first DL
+def getDeeplink(itinerary):
+   for p in itinerary['PricingOptions']:
+      #print "Debug:" + p['DeeplinkUrl']
+      return p['DeeplinkUrl']
+
 
 #Initiates Sessions for countries with PIA VPN endpoints
 #configured to avoid rate limit issues. Experimental for use with
@@ -278,17 +286,20 @@ def demo():
       if(price!=None and getSkyScannerSegments_print(i)):
          print "Trip Cost: "+u"\u20AC"+str(getSkyScannerCosts(i))+"\n"
 
+   #Avoids getting locked out for request flooding
    time.sleep(10)
    res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
    itins = getItinerarySet(res)
    possibleRoutes = []
    for i in itins:
       price = getSkyScannerCosts(i)
+      dl = getDeeplink(i)
+      print "DEBUG: "+dl
       if(price!=None):
          segs = getSkyScannerSegments(i)
          if(segs != False and segs != None):
             possibleRoutes.append(FlightSet(segs, getSkyScannerCosts(i), "EUR"))
-            print FlightSet(segs, getSkyScannerCosts(i), "EUR")
+            print FlightSet(segs, getSkyScannerCosts(i), "EUR", dl)
             print ""
 
 
