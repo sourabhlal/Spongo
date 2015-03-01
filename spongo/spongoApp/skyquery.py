@@ -77,8 +77,6 @@ def buildAirlineCache(results):
       a = Airline(c['Code'], c['DisplayCode'], c['Id'], c['ImageUrl'], c['Name'])
       addAirline(a)
 
-
-
 #Note: Postman is a nice extension
 
 #Country is ISO code
@@ -181,20 +179,26 @@ def VPNResultSet(queryData):
       time.sleep(6)
    return returnSet
 
+#Wrapper to initiate session, run aux. functions, and return results
+def initiateSession(country, currency, dep, dest, outdate, indate, cabin):
+   query = buildQueryData(country, currency, dep, dest, outdate, indate, cabin)
+   res = getSkyScannerRoutes(query)
+   buildAirportCache(res)
+   buildAirlineCache(res)
+   return res
 
+def getItinerarySet(initialResults):
+   r = initialResults['Itineraries']
+   return r
 
 #print requests.get("http://partners.api.skyscanner.net/apiservices/reference/v1.0/countries/en-GB?apiKey="+apikey).json()
 
 #Fun fact: If the airport code doesn't exist, this app crashes
-query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy")
 #VPNResultSet(query)
-
-res = getSkyScannerRoutes(query)
-buildAirportCache(res)
-buildAirlineCache(res)
+res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
 #print airportCache
 #print airlineCache
-itins = res['Itineraries']
+itins = getItinerarySet(res)
 for i in itins:
    #print i['BookingDetailsLink']
    #getSkyScannerCosts(i)
