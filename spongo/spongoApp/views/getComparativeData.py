@@ -2,6 +2,10 @@ from bs4 import BeautifulSoup
 import urllib2
 from django.shortcuts import render
 from spongoApp.forms import *
+import xml.etree.ElementTree as ET
+from django.http import HttpResponse
+
+currencyCode = {}
 
 #Returns list with {name, url} objects
 def getCountries(url):
@@ -36,7 +40,14 @@ def getCountryInfo(country):
 	brokenCategoriesSoup = BeautifulSoup(' '.join([str(x) for x in dataTableHtml]))
 	
 	average = brokenCategoriesSoup.select('tr.country')
-	average = average[0].find('span', {'class':'curvalue'}).text
+	if len(average) > 0:
+		average = average[0].find('span', {'class':'curvalue'})
+	else:
+		average = None
+	if average is not None:
+		average = average.text
+	else:
+		average = "0.0"
 	countryDetails = {'average' : average}
 	rows = brokenCategoriesSoup.select('tr.category')
 
@@ -57,5 +68,43 @@ def getAll(baseurl):
 		print getCountryInfo(country)
 
 
-def getCostOfLivingData():
-	getAll('http://www.budgetyourtrip.com/countrylist.php')
+
+
+def getCurrencyCodes():
+	tree = ET.ElementTree(file='spongoApp/views/CurrencyCodes.xml')
+	root = tree.getroot()
+	#get the first child
+	currencyTable = root.getchildren()[0]
+	for tags in currencyTable.findall('CcyNtry'):
+		name = tags.find('CtryNm').text
+		ccode = tags.find('Ccy')
+		if ccode is None:
+			continue
+		currencyCode[name.lower()] = ccode
+
+
+def populate(arg):
+	#baseurl = 'http://www.budgetyourtrip.com/countrylist.php'
+	#countries = getCuontries(baseurl)
+	#for country in countries:
+	getCurrencyCodes()
+	countries = getCountries('http://www.budgetyourtrip.com/countrylist.php')
+	for country in countries:
+		details = getCountryInfo(country)
+		CostOfLiving(
+				country_name = country['name'].lower(),
+				averageCost = float(details['average'].replace(',','')) if 'average' in details.keys() else 0,
+				accomodation = float(details['Accomodation'].replace(',','')) if 'Accomodation' in details.keys() else 0,
+				food = float(details['Food'].replace(',','')) if 'Food' in details.keys() else 0,
+				water = float(details['Water'].replace(',','')) if 'Water' in details.keys() else 0,
+				local_transportation = float(details['Local Transportation'].replace(',','')) if 'Local Transportation' in details.keys() else 0,
+				entertainment = float(details['Entertainment'].replace(',','')) if 'Entertainment' in details.keys() else 0,
+				communication = float(details['Communication'].replace(',','')) if 'Communication' in details.keys() else 0,
+				tips = float(details['Tips and Handouts'].replace(',','')) if 'Tips and Handouts' in details.keys() else 0,
+				intercity_transport = float(details['Intercity Transportation'].replace(',','')) if 'Intercity Transportation' in details.keys() else 0, 
+				souvenirs = float(details['Souvenirs'].replace(',','')) if 'Souvenirs' in details.keys() else 0,
+				scams_robberies_mishaps = float(details['Scams, Robberies, and Mishaps'].replace(',','')) if 'Scams, Robberies, and Mishaps' in details.keys() else 0,
+				alcohol = float(details['Alcohol'].replace(',','')) if 'Alcohol' in details.keys() else 0
+		)
+	testhtml = '<html><body>Yo!</body></html>' #coz yo
+	return HttpResponse(testhtml)

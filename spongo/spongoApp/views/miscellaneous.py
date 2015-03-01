@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from spongoApp.forms import *
 from spongoApp.views.getComparativeData import *
-from spongoApp.views.skyquery import *
+from spongoApp.skyquery import *
 import datetime
 
 
@@ -36,22 +36,22 @@ def results(request):
 	start = s.strftime('%Y-%d-%m')
 	finish = s.strftime('%Y-%d-%m')
 	startIATACode = data['startingPoint']
+	finalIATACode = data['landingPoint']
 
-	query = buildQueryData("DE","EUR",startIATACode,"BCN",start,finish,"Economy")
+	query = buildQueryData("DE","EUR","HAM","BCN","2015-03-11","2015-03-14","Economy")
 	getSkyScannerRoutes(query)
 	res = getSkyScannerRoutes(query)
 	prices = []
-	carrier = []
+	fg = []
+	fgIN = []
 	itins = res['Itineraries']
 	for it in itins:
 		Itincost = getSkyScannerCosts(it)
-   		for i in Itincost:
-   			prices.append(i['Price'])
-   		carrier.append(getSkyScannerSegments(it))
+   		prices.append(Itincost)
+   		fg.append(getSkyScannerSegments(it))
 
-   	flightDetails = zip(prices,carrier)
-
-	context['flightDetails'] = flightDetails
+   	flightDetails = zip(prices,fg)
+   	context['flightDetails'] = flightDetails
 
 	return render(request, 'results.html', context)
 
@@ -81,17 +81,17 @@ def testing(request):
 	getSkyScannerRoutes(query)
 	res = getSkyScannerRoutes(query)
 	prices = []
-	carrier = []
+	fgOUT = []
+	fgIN = []
 	itins = res['Itineraries']
 	for it in itins:
 		Itincost = getSkyScannerCosts(it)
    		for i in Itincost:
    			prices.append(i['Price'])
-   		carrier.append(getSkyScannerSegments(it))
+   		fgOUT.append(str(getSkyScannerSegments(it)[0]))
+   		fgIN.append(str(getSkyScannerSegments(it)[1]))
 
-
-
-   	flightDetails = zip(prices,carrier)
+   	flightDetails = zip(prices,fgOUT)
 
 	context['flightDetails'] = flightDetails
 

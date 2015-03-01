@@ -281,10 +281,17 @@ def demo():
    possibleRoutes = []
    
    #Non-Object Oriented
+<<<<<<< HEAD
    # for i in itins:
    #    price = getSkyScannerCosts(i)
    #    if(price!=None and getSkyScannerSegments_print(i)):
    #       print "Trip Cost: "+u"\u20AC"+str(getSkyScannerCosts(i))+"\n"
+=======
+   for i in itins:
+      price = getSkyScannerCosts(i)
+      if(price!=None and getSkyScannerSegments_print(i)):
+         print "Trip Cost: "+str(getSkyScannerCosts(i))+"\n"
+>>>>>>> e73daa83023afaeb7769eae0251aa2885366cb6e
 
    #Avoids getting locked out for request flooding
    time.sleep(10)
