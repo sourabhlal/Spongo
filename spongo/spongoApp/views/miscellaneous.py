@@ -50,7 +50,7 @@ def results(request):
    		prices.append(Itincost)
    		fg.append(getSkyScannerSegments(it))
 
-   	flightDetails = zip(prices,fgOUT)
+   	flightDetails = zip(prices,fg)
    	context['flightDetails'] = flightDetails
 
 	return render(request, 'results.html', context)
