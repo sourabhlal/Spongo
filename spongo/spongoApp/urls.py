@@ -6,4 +6,5 @@ urlpatterns = patterns('',
     url(r'^home/$', 'spongoApp.views.miscellaneous.home'),
     url(r'^settings/$', 'spongoApp.views.settings.home'),
     url(r'^testing/$', 'spongoApp.views.miscellaneous.testing',name='test'),
+    url(r'^populateCostOfLivingData/$', 'spongoApp.views.getComparativeData.populate',name='test'),
 )

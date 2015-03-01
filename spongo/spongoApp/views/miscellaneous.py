@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from spongoApp.forms import *
+from spongoApp.views.getComparativeData import *
 import skyquery
-#http://stackoverflow.com/questions/2349991/python-how-to-import-other-python-files
+
 
 def home(request):
 	context = {}
