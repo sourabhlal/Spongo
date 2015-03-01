@@ -4,6 +4,81 @@ import urlparse
 
 apikey = "ilw22874698541348193416710397562"
 
+#We can shoehorn places if need be
+#Edge case, no time or sleep.
+#Removed parentID because it was bugged
+class Airport:
+   #def __init__(self, code, nid, cname, pid, ctype):
+   def __init__(self, code, nid, cname, ctype):
+      self.iataCode = code
+      self.rnid = nid
+      self.colloquialName = cname
+      #self.parentID = pid
+      self.contentType = ctype
+
+class Airline:
+   def __init__(self, code, dcode, nid, logo, cname):
+      self.iataCode = code
+      self.displayCode = dcode
+      self.rnid = nid
+      self.carrierLogoURL = logo
+      self.colloquialName = cname
+
+airportCache = {}
+airlineCache = {}
+
+def addAirport(air):
+   airportCache[air.rnid] = air
+
+def addAirline(air):
+   airlineCache[air.rnid] = air
+
+#Both of these are pretty useless I think
+#Raw dict access is usable, and I'm too tired to debug
+def lookupAirportByKey(rnid):
+   if rnid in airportCache:
+      return airportCache[rnid]
+
+def lookupAirlineByKey(rnid):
+   if rnid in airportCache:
+      return airportCache[rnid]
+
+def iataAirportByKey(rnid):
+   if rnid in airportCache:
+      return airportCache[rnid].iataCode
+
+def iataAirlineByKey(rnid):
+   if rnid in airlineCache:
+      return airlineCache[rnid].iataCode
+
+def airlineLogoByKey(rnid):
+   if rnid in airlineCache:
+      return airlineCache[rnid].carrierLogoURL
+
+def airlineNameByKey(rnid):
+   if rnid in airlineCache:
+      return airlineCache[rnid].colloquialName
+
+def airportNameByKey(rnid):
+   if rnid in airportCache:
+      return airportCache[rnid].iataCode
+
+#Takes JSON
+def buildAirportCache(results):
+   airports = results['Places']
+   for c in airports:
+      #a = Airport(c['Code'], c['Id'], c['Name'], c['ParentId'], c['Type'])
+      a = Airport(c['Code'], c['Id'], c['Name'], c['Type'])
+      addAirport(a)
+
+def buildAirlineCache(results):
+   carriers = results['Carriers']
+   for c in carriers:
+      a = Airline(c['Code'], c['DisplayCode'], c['Id'], c['ImageUrl'], c['Name'])
+      addAirline(a)
+
+
+
 #Note: Postman is a nice extension
 
 #Country is ISO code
@@ -79,11 +154,13 @@ def getSkyScannerSegments(itinerary):
       results = requests.get(r.headers['Location']+"?apiKey="+apikey).json()
       segments = results['Segments']
       for s in segments:
-         if s['Directionality']=='Outbound':
-            print "=> Flight",s['Carrier'],s['FlightNumber'],"Lasting",s['Duration']
-         else:
-            print "<= Flight",s['Carrier'],s['FlightNumber'],"Lasting",s['Duration']
-
+         try:
+            if s['Directionality']=='Outbound':
+               print "=> Flight",airlineCache[s['Carrier']].iataCode,s['FlightNumber'],"Lasting",s['Duration'],"minutes from",airportCache[s['OriginStation']].iataCode,"to",airportCache[s['DestinationStation']].iataCode
+            else:
+               print "<= Flight",airlineCache[s['Carrier']].iataCode,s['FlightNumber'],"Lasting",s['Duration'],"minutes from",airportCache[s['OriginStation']].iataCode,"to",airportCache[s['DestinationStation']].iataCode
+         except:
+            pass
 
 def getSkyScannerSegments_raw(itinerary):
    details = itinerary['BookingDetailsLink']
@@ -113,6 +190,10 @@ query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy
 #VPNResultSet(query)
 
 res = getSkyScannerRoutes(query)
+buildAirportCache(res)
+buildAirlineCache(res)
+#print airportCache
+#print airlineCache
 itins = res['Itineraries']
 for i in itins:
    #print i['BookingDetailsLink']
@@ -120,7 +201,7 @@ for i in itins:
    getSkyScannerSegments(i)
    #print getSkyScannerSegments_raw(i)
 
-print getSkyScannerRoutes_raw(query)
+#print getSkyScannerRoutes_raw(query)
 
 
 

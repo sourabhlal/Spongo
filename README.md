@@ -11,3 +11,8 @@ The sentiment is a nice one, but then you think of all the evil subclauses relat
 Spongo is the real-time solution to all your pseudo-spontaneity travel problems.
 
 In a clear, intuitive, user interface our web application integrates a budget over a 'free-time' interval. It then plans a complete, spontanous travel package for the user; while taking into account flight, accomodation, food and beverage, and transit costs for each potential travel destination.
+
+
+#Spongoloid Python API Wrapper for FlightAware
+The skyquery.py file in SpongoApp is a wrapper that may simplify the process.
+Spongoloid is free for anyone to use at KairosHacks. Please use your own API key though. 
