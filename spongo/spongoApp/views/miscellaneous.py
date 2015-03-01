@@ -33,21 +33,16 @@ def testing(request):
 	res = getSkyScannerRoutes(query)
 	prices = []
 	carrier = []
-	flightNumber = []
-	duration = []
 	itins = res['Itineraries']
 	for it in itins:
 		Itincost = getSkyScannerCosts(it)
    		for i in Itincost:
    			prices.append(i['Price'])
-		Itinsegm = getSkyScannerSegments(i)
-		for i in Itinsegm:
-			carrier.append(i['Carrier'])
-			flightNumber.append(i['FlightNumber'])
-			duration.append(i['Duration'])
+   		carrier.append(getSkyScannerSegments(it))
 
 
-   	flightDetails = zip(prices,carrier,flightNumber,duration)
+
+   	flightDetails = zip(prices,carrier)
 
 	context['flightDetails'] = flightDetails
 

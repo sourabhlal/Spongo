@@ -79,12 +79,16 @@ def getSkyScannerSegments(itinerary):
    if r.status_code == 201:
       results = requests.get(r.headers['Location']+"?apiKey="+apikey).json()
       segments = results['Segments']
+      carrier = []
+      flightNumber = []
       for s in segments:
+         carrier.append(s['Carrier'])
+         flightNumber.append(s['FlightNumber'])
          if s['Directionality']=='Outbound':
             print "=> Flight",s['Carrier'],s['FlightNumber'],"Lasting"
          else:
             print "<= Flight",s['Carrier'],s['FlightNumber'],"Lasting"
-      return segments
+      return carrier,flightNumber
 
 
 def getSkyScannerSegments_raw(itinerary):
