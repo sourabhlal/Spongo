@@ -281,25 +281,25 @@ def demo():
    possibleRoutes = []
    
    #Non-Object Oriented
-   # for i in itins:
-   #    price = getSkyScannerCosts(i)
-   #    if(price!=None and getSkyScannerSegments_print(i)):
-   #       print "Trip Cost: "+u"\u20AC"+str(getSkyScannerCosts(i))+"\n"
-
-   #Avoids getting locked out for request flooding
-   time.sleep(10)
-   res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
-   itins = getItinerarySet(res)
-   possibleRoutes = []
    for i in itins:
       price = getSkyScannerCosts(i)
-      dl = getDeeplink(i)
-      if(price!=None):
-         segs = getSkyScannerSegments(i)
-         if(segs != False and segs != None):
-            possibleRoutes.append(FlightSet(segs, getSkyScannerCosts(i), "EUR", dl))
-            print FlightSet(segs, getSkyScannerCosts(i), "EUR", dl)
-            print ""
+      if(price!=None and getSkyScannerSegments_print(i)):
+         print "Trip Cost: "+u"\u20AC"+str(getSkyScannerCosts(i))+"\n"
+
+   #Avoids getting locked out for request flooding
+   # time.sleep(10)
+   # res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
+   # itins = getItinerarySet(res)
+   # possibleRoutes = []
+   # for i in itins:
+   #    price = getSkyScannerCosts(i)
+   #    dl = getDeeplink(i)
+   #    if(price!=None):
+   #       segs = getSkyScannerSegments(i)
+   #       if(segs != False and segs != None):
+   #          possibleRoutes.append(FlightSet(segs, getSkyScannerCosts(i), "EUR", dl))
+   #          print FlightSet(segs, getSkyScannerCosts(i), "EUR", dl)
+   #          print ""
 
 
 

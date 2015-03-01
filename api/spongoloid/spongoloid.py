@@ -287,7 +287,7 @@ def demo():
    #       print "Trip Cost: "+u"\u20AC"+str(getSkyScannerCosts(i))+"\n"
 
    #Avoids getting locked out for request flooding
-   time.sleep(10)
+   #time.sleep(10)
    res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
    itins = getItinerarySet(res)
    possibleRoutes = []
