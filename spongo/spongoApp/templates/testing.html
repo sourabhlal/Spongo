@@ -1,15 +1,7 @@
+{% extends "baseTemplate.html" %}
 <!DOCTYPE HTML>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    	<meta name="viewport" content="width=device-width, initial-scale=1">
-    	<meta name="description" content="">
-    	<meta name="author" content="Sourabh Lal, Nick Lee, Bidesh Thapaliya, JP Breuer">
-    	<link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
-    	<link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
-	</head>
-	<body>
+	{% block pageBody %}
+		<body>
 		<form method="post" action="{% url 'test' %}">
 				<div>
 					<table>
@@ -41,15 +33,13 @@
 				</div>
 			</div>
 			
-			{% for s, p in flightDetails %}
+			{% for p,c,f,d in flightDetails %}
 			<div id="tableRow">
 				<div class="col-md-2">
-					{{p.Price}}
+					{{p}}
 				</div>
 				<div class="col-md-3">
-					<p> {{s.Carrier}} </p>
-					<p> {{s.FlightNumber}} </p>
-					<p> {{s.Duration}} </p>
+					{{c}} , {{f}} , {{d}}
 				</div>
 				<div class="col-md-3">
 				</div>
@@ -60,5 +50,4 @@
 			</div>
 			{% endfor %}
 			{% endif %}
-	</body>
-</html>
+	{% endblock %}
