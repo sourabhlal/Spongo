@@ -276,7 +276,7 @@ def demo():
    for i in itins:
       price = getSkyScannerCosts(i)
       if(price!=None and getSkyScannerSegments_print(i)):
-         print "Trip Cost: "+u"\u20AC"+str(getSkyScannerCosts(i))+"\n"
+         print "Trip Cost: "+str(getSkyScannerCosts(i))+"\n"
 
    time.sleep(10)
    res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
