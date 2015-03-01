@@ -42,14 +42,13 @@ def results(request):
 	getSkyScannerRoutes(query)
 	res = getSkyScannerRoutes(query)
 	prices = []
-	fgOUT = []
+	fg = []
 	fgIN = []
 	itins = res['Itineraries']
 	for it in itins:
 		Itincost = getSkyScannerCosts(it)
    		prices.append(Itincost)
-   		fgOUT.append(getSkyScannerSegments(it)[0])
-   		fgIN.append(getSkyScannerSegments(it)[1])
+   		fg.append(getSkyScannerSegments(it))
 
    	flightDetails = zip(prices,fgOUT)
    	context['flightDetails'] = flightDetails
