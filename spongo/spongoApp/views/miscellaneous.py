@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from spongoApp.forms import *
 from spongoApp.views.getComparativeData import *
-import skyquery
+from spongoApp.views.skyquery import *
 
 
 def home(request):
@@ -28,6 +28,20 @@ def testing(request):
 	#data['startingDestination2']
 	#data['startingDestination3']
 
-	#get JSON
-	context["results"] = data['minimumBudget']
+	query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy")
+	getSkyScannerRoutes(query)
+	res = getSkyScannerRoutes(query)
+	p = []
+	s = []
+	itins = res['Itineraries']
+	for i in itins:
+   		#print i['BookingDetailsLink']
+   		p.append(getSkyScannerCosts(i))
+   		s.append(getSkyScannerSegments(i))
+
+   	flightDetails = zip(s,p)
+
+	context['flightDetails'] = flightDetails
+
 	return render(request, 'testing.html', context)
+
