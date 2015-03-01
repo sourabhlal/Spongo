@@ -28,18 +28,26 @@ def testing(request):
 	#data['startingDestination2']
 	#data['startingDestination3']
 
-	query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy")
+	query = buildQueryData("DE","EUR","HAM","BCN","2015-03-11","2015-03-14","Economy")
 	getSkyScannerRoutes(query)
 	res = getSkyScannerRoutes(query)
-	p = []
-	s = []
+	prices = []
+	carrier = []
+	flightNumber = []
+	duration = []
 	itins = res['Itineraries']
-	for i in itins:
-   		#print i['BookingDetailsLink']
-   		p.append(getSkyScannerCosts(i))
-   		s.append(getSkyScannerSegments(i))
+	for it in itins:
+		Itincost = getSkyScannerCosts(it)
+   		for i in Itincost:
+   			prices.append(i['Price'])
+		Itinsegm = getSkyScannerSegments(i)
+		for i in Itinsegm:
+			carrier.append(i['Carrier'])
+			flightNumber.append(i['FlightNumber'])
+			duration.append(i['Duration'])
 
-   	flightDetails = zip(s,p)
+
+   	flightDetails = zip(prices,carrier,flightNumber,duration)
 
 	context['flightDetails'] = flightDetails
 
