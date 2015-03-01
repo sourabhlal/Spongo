@@ -1,0 +1,45 @@
+{% extends "baseTemplate.html" %}
+{% block customCSSFiles %}
+<link href="/static/css/homepageTemplate.css" rel="stylesheet">
+{% endblock %}
+
+<!DOCTYPE HTML>
+	{% block pageBody %}
+		<body>
+			{% if flightDetails %}
+			<div id="tableHeader">
+				<div class="col-md-2">
+					Price+Pie
+				</div>
+				<div class="col-md-3">
+					Flight
+				</div>
+				<div class="col-md-3">
+					Accomodation
+				</div>
+				<div class="col-md-3">
+					Living Expense
+				</div>
+				<div class="col-md-1">
+					Book now!
+				</div>
+			</div>
+			
+			{% for p,c in flightDetails %}
+			<div id="tableRow">
+				<div class="col-md-2">
+					{{p}}
+				</div>
+				<div class="col-md-3">
+					{{c}}
+				</div>
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-1">
+				</div>
+			</div>
+			{% endfor %}
+			{% endif %}
+	{% endblock %}
