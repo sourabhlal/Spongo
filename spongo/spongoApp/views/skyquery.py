@@ -48,11 +48,27 @@ def getSkyScannerRoutes(queryData):
       time.sleep(1)
    return results
 
+def getSkyScannerRoutes_raw(queryData):
+   tries = 0
+   r = requests.post("http://partners.api.skyscanner.net/apiservices/pricing/v1.0/?apikey="+apikey, data=queryData)
+   try:
+      results = requests.get(r.headers['Location'] + "?apiKey="+apikey).json()
+   except:
+      results = {}
+      results['Status']="err"
+   while results['Status']!="UpdatesComplete" and tries < 30:
+      try:
+         results = requests.get(r.headers['Location'] + "?apiKey="+apikey).json()
+      except:
+         results['Status']="err"
+      tries+= 1
+      time.sleep(1)
+   return requests.get(r.headers['Location'] + "?apiKey="+apikey).text
+
 def getSkyScannerCosts(itinerary):
    prices = itinerary['PricingOptions']
    for i in prices:
-      print itinerary['OutboundLegId'],":",i['Price']
-   return prices
+      print itinerary['OutboundLegId'],":",u"\u20AC",i['Price']
    #print itinerary['OutboundLegId'],itinerary['PricingOptions']
 
 #Prints for now BC we don't understand the data struct
@@ -63,8 +79,10 @@ def getSkyScannerSegments(itinerary):
       results = requests.get(r.headers['Location']+"?apiKey="+apikey).json()
       segments = results['Segments']
       for s in segments:
-         print "Flight",s['Carrier'],s['FlightNumber'],"Lasting",s['Duration']
-      return segments
+         if s['Directionality']=='Outbound':
+            print "=> Flight",s['Carrier'],s['FlightNumber'],"Lasting"
+         else:
+            print "<= Flight",s['Carrier'],s['FlightNumber'],"Lasting"
 
 
 def getSkyScannerSegments_raw(itinerary):
@@ -87,10 +105,8 @@ def VPNResultSet(queryData):
    return returnSet
 
 
-
-#print requests.get("http://partners.api.skyscanner.net/apiservices/reference/v1.0/countries/en-GB?apiKey="+apikey).json()
-
-def testSkyQuery():
+def testSkyQuery:
+   #print requests.get("http://partners.api.skyscanner.net/apiservices/reference/v1.0/countries/en-GB?apiKey="+apikey).json()
    #Fun fact: If the airport code doesn't exist, this app crashes
    query = buildQueryData("DE","EUR","HAM","BCN","2015-03-07","2015-03-14","Economy")
    #VPNResultSet(query)
@@ -98,8 +114,10 @@ def testSkyQuery():
    itins = res['Itineraries']
    for i in itins:
       #print i['BookingDetailsLink']
-      getSkyScannerCosts(i)
+      #getSkyScannerCosts(i)
       getSkyScannerSegments(i)
+      #print getSkyScannerSegments_raw(i)
+   print getSkyScannerRoutes_raw(query)
 
 def get_airport(city):
    headers = {
