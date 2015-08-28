@@ -276,9 +276,9 @@ def demo():
    time.sleep(2.5)
    #Fun fact: If the airport code doesn't exist, this app crashes
    #VPNResultSet(query)
-   res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
-   itins = getItinerarySet(res)
-   possibleRoutes = []
+   # res = initiateSession("DE","EUR","HAM","PHL","2015-03-07","2015-03-14","Economy")
+   # itins = getItinerarySet(res)
+   # possibleRoutes = []
    
    #Non-Object Oriented
    # for i in itins:
